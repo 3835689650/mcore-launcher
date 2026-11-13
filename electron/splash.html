@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MCore Launcher</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<style>
+  :root {
+    --bg: #111413;
+    --ink: #edf0ef;
+    --dim: #7c8a83;
+    --accent: #00ff00;
+    --track: #2a3330;
+    --sweep: #cef1d9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%; background: transparent;
+    -webkit-user-select: none; user-select: none; cursor: default;
+    overflow: hidden;
+  }
+  .card {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    background: radial-gradient(120% 90% at 50% 42%, #191f1d 0%, var(--bg) 62%, #0b0e0d 100%);
+    border-radius: 18px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.55), inset 0 0 0 1px rgba(237,240,239,.08);
+    color: var(--ink);
+    font: 13px/1.5 system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    opacity: 1; transition: opacity .24s ease, transform .24s ease;
+    -webkit-app-region: drag;
+  }
+  body.out .card { opacity: 0; transform: scale(.985); }
+  .stack { width: 300px; text-align: center; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ink { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; }
+  .core { fill: var(--accent); opacity: 0; }
+  .word { fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  .outer { stroke-dashoffset: 1; animation: write .51s ease-in-out .06s both; }
+  .inner { stroke-dashoffset: 1; animation: write .48s ease-in-out .40s both; }
+  .word path { animation: write 1.05s linear .62s both; }
+  .core { animation: coreIn .5s ease-out 1.5s both; }
+  .track {
+    position: relative; width: 46%; height: 3px; margin: 22px auto 0;
+    background: var(--track); border-radius: 3px; overflow: hidden;
+  }
+  .track::after {
+    content: ""; display: block; width: 42%; height: 100%;
+    background: var(--sweep); border-radius: 3px;
+    animation: sweep 1.15s ease-in-out infinite;
+  }
+  .caption { margin-top: 12px; color: var(--dim); font-size: 12px; letter-spacing: .04em; }
+  .ver { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #55615b; font-size: 11px; letter-spacing: .06em; }
+  @keyframes write { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes coreIn { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+  @keyframes sweep { from { transform: translateX(-105%); } to { transform: translateX(245%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .outer, .inner, .word path, .core { animation: none; stroke-dashoffset: 0; opacity: 1; }
+    .track::after { animation: none; width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="stack">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 629 188" role="img" aria-label="mousa">
+        <g class="mark">
+          <circle class="core" cx="96" cy="94" r="12"/>
+          <circle class="ink outer" cx="96" cy="94" r="78" pathLength="1" transform="rotate(-90 96 94)"/>
+          <circle class="ink inner" cx="96" cy="94" r="47" pathLength="1"/>
+          <path class="ink inner" pathLength="1" d="M96 47V76M96 112V141M49 94H78M114 94H143M68 65H124V123H68ZM68 65L85 83M124 65L107 83M68 123L85 105M124 123L107 105"/>
+          <path class="ink inner" pathLength="1" d="M90 76H102V88H114V100H102V112H90V100H78V88H90Z"/>
+        </g>
+        <g class="word"><path pathLength="1" d="M222 119 C236 117 246 91 258 89 C272 87 262 107 257 121 C268 104 279 88 289 90 C301 92 288 111 285 121 C298 102 311 87 320 91 C330 96 311 118 324 120 C337 123 346 100 358 93 C374 83 388 95 378 112 C369 127 349 124 350 111 C351 98 365 87 375 94 C385 103 397 99 406 90 C400 105 390 120 402 121 C415 122 428 104 435 90 C430 105 421 120 433 121 C446 122 458 101 469 89 C460 100 465 105 475 110 C486 119 469 128 458 119 C452 113 479 126 494 105 C507 87 526 86 529 98 C531 111 511 128 501 119 C491 109 509 89 522 94 C534 98 519 116 531 120 C543 124 561 115 578 105"/></g>
+      </svg>
+      <div class="track"></div>
+      <div class="caption">正在启动…</div>
+    </div>
+    <div class="ver" id="ver">MCore Launcher</div>
+  </div>
+<script>
+  // 版本号由主进程通过 ?v= 传入，避免额外 IPC
+  (function () {
+    var v = new URLSearchParams(location.search).get('v');
+    if (v) document.getElementById('ver').textContent = 'MCore Launcher ' + v;
+  })();
+</script>
+</body>
+</html>

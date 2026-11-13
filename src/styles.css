@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* 手动主题切换：data-theme 属性驱动 dark 变体 */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --color-brand: #2563eb;
+  --color-success: #16a34a;
+  --color-danger: #dc2626;
+  --color-warning: #ca8a04;
+}
+
+/* 基础底色：跟随主题的纯色（液态玻璃的底层） */
+:root,
+[data-theme="light"] {
+  --bg-base: #fafaf9;
+  --bg-card: #ffffff;
+  --bg-panel: rgba(255, 255, 255, 0.72);
+  --text-main: #18181b;
+  --text-sub: #71717a;
+  --border-base: #e4e4e7;
+}
+
+[data-theme="dark"] {
+  --bg-base: #18181b;
+  --bg-card: #27272a;
+  --bg-panel: rgba(39, 39, 42, 0.72);
+  --text-main: #f4f4f5;
+  --text-sub: #a1a1aa;
+  --border-base: #3f3f46;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 可选中区域（日志/版本号等） */
+.selectable {
+  user-select: text;
+}
+
+/* 装饰光斑（仅玻璃模式开启时渲染，位于最底层之上） */
+.glass-orb {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(96px);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 300ms ease;
+}
+
+/* 面板基底：默认纯色；data-glass="on" 时叠加半透明毛玻璃层，透明度由 --glass-alpha（0-100）控制 */
+.mc-panel {
+  background: var(--bg-card);
+  transition: background 300ms ease;
+}
+[data-glass="on"] .mc-panel {
+  background: color-mix(in srgb, var(--bg-panel) calc(var(--glass-alpha, 70) * 1%), transparent);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-base);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

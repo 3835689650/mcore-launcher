@@ -1,0 +1,12 @@
+node_modules/
+release/
+dist/
+dist-electron/
+*.dmg
+*.zip
+*.AppImage
+*.deb
+*.exe
+.DS_Store
+*.log
+.tripo/

@@ -1,0 +1,98 @@
+{
+  "name": "mcore-launcher",
+  "version": "1.7.0",
+  "private": true,
+  "description": "MCore Launcher - 轻量私有镜像 Minecraft 启动器",
+  "homepage": "https://www.1b1t.cn",
+  "author": {
+    "name": "1B1T",
+    "email": "admin@1b1t.cn"
+  },
+  "main": "dist-electron/main.js",
+  "build": {
+    "appId": "cn.1b1t.mcore",
+    "productName": "MCore Launcher",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "locales",
+        "to": "locales"
+      },
+      {
+        "from": "resources/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "resources/icon.png",
+      "category": "public.app-category.games"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "resources/icon.png",
+      "category": "Game"
+    },
+    "asar": true,
+    "asarUnpack": [
+      "dist/**",
+      "dist-electron/**"
+    ]
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build:renderer": "vite build",
+    "build:main": "tsc -p tsconfig.electron.json && node scripts/copy-assets.mjs",
+    "build": "npm run build:renderer && npm run build:main",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.electron.json --noEmit",
+    "dist": "npm run build && electron-builder",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "test:unit": "node scripts/unit-test.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-progress": "^1.1.16",
+    "@radix-ui/react-select": "^2.3.7",
+    "@radix-ui/react-slider": "^1.4.7",
+    "@radix-ui/react-switch": "^1.3.7",
+    "@tanstack/react-virtual": "^3.14.13",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.52.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0"
+  }
+}
